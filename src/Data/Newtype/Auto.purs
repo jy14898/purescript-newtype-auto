@@ -5,6 +5,7 @@ import Prelude (identity, (<<<))
 import Data.Newtype (class Newtype, unwrap, wrap)
 
 -- Only using a to allow the superclass constraint
+-- Is it worth it?
 class (Newtype t a) <= AutoNewtype t o a
     | t -> a
     , o -> a where
@@ -28,6 +29,10 @@ type Auto t = forall o a. AutoNewtype t o a => o
 pretend :: forall t r. (Auto t -> r) -> t -> r
 pretend f v = f (autoUnwrap v)
 
+-- problem with this is that if you pass in identity
+-- o ~ Auto t
+-- and then we're looking up AutoNewtype t (Auto t) a
+-- which I have no idea if it would work when the apartness bug is fixed
 modify :: forall t o a. AutoNewtype t o a => (Auto t -> o) -> t -> t
 modify f = autoWrap <<< pretend f
 
