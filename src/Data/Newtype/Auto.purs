@@ -6,6 +6,13 @@ import Data.Newtype (class Newtype, unwrap, wrap)
 
 -- Only using a to allow the superclass constraint
 -- Is it worth it?
+-- Also should I flip the order of o and a
+
+-- | A type class similar to `Data.Newtype.Newtype`, however, unwrapping may
+-- | return the wrapped type if the use of the result expects it.
+-- |
+-- | Note that any instance will overlap with the two instances defined here,
+-- | so instances of this class should not be defined in libraries.
 class (Newtype t a) <= AutoNewtype t o a
     | t -> a
     , o -> a where
